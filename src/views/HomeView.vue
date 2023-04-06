@@ -1,3 +1,25 @@
+<script setup>
+import { onBeforeMount,ref } from 'vue';
+import axios from 'axios'
+
+const allBooks = ref([])
+
+const fetchAllBooks = async ()=>{
+    const books = await axios.get('http://localhost:3000/books/')
+    console.log(books.data)
+    allBooks.value = books.data
+}
+
+onBeforeMount(async ()=>{
+    await fetchAllBooks()
+})
+
+
+
+
+
+</script>
+
 <template>
     <section class="tm-margin-b-l">
                     <header>
@@ -8,6 +30,10 @@
                     
                     <div class="tm-gallery">
                         <div class="row">
+
+                        {{ allBooks }}
+
+
                             <figure class="col-lg-3 col-md-4 col-sm-6 col-12 tm-gallery-item">
                                 <a href="preview.html">
                                     <div class="tm-gallery-item-overlay">
