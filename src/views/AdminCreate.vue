@@ -11,7 +11,6 @@ const router = useRouter()
 
 const addNewBook = async ()=>{
     console.log('je vais envoyer en POST:   ')
-    // console.log(title.value,author.value,cover.value)
     const newBook = {
         title:title.value,
         author:author.value,

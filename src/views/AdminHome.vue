@@ -4,20 +4,40 @@ import { useRouter } from 'vue-router';
 import axios from 'axios'
 
 const allBooks = ref([])
-const router = useRouter()
+const router   = useRouter()
 
 
 const fetchAllBooks = async ()=>{
     const books = await axios.get('http://localhost:3000/books/')
-    allBooks.value = books.data
+    const {data,status} = books
+
+    allBooks.value = data
 }
 
 const createBtn = ()=>{
     router.push({name:'adminCreate'})
 }
 
+const gotoEdit = (bookId)=>{
+    router.push({
+        name:'adminUpdate',
+        params:{bookId:bookId}
+    })
+}
 
+const deleteOneBook = async (id)=>{
 
+    const isOkayToDelete = confirm('Are you sure?')
+    if(isOkayToDelete){
+
+        const tryToDelete = await axios.delete('http://localhost:3000/books/'+id)
+        console.log(tryToDelete)
+        await fetchAllBooks()
+    }else{
+        // sinon rien pour l'instant
+    }
+
+}
 
 
 onBeforeMount(async ()=>{
@@ -45,8 +65,8 @@ onBeforeMount(async ()=>{
                 <td>{{ books.title }}</td>
                 <td>{{ books.author }}</td>
                 <td>
-                    <button type="button" class="btn btn-primary"><i class="fa fa-pencil" aria-hidden="true"></i></button>
-                    <button type="button" class="btn btn-danger ml-2"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                    <button type="button" class="btn btn-primary" @click="gotoEdit(books.id)" ><i class="fa fa-pencil" aria-hidden="true" ></i></button>
+                    <button type="button" class="btn btn-danger ml-2" @click="deleteOneBook(books.id)"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
                 </td>
             </tr>
         </tbody>
